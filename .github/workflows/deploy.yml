@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Full CI/CD pipeline
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
+  lint-build-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run Prettier check
+        run: npm run format
+
+      - name: Run ESLint
+        run: npm run lint
+
       - name: Build site
         run: npm run build
 
@@ -32,3 +38,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+
